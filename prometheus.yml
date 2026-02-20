@@ -3,5 +3,13 @@ global:
 
 scrape_configs:
   - job_name: 'board-service'
-    static_configs:
-      - targets: ['host.docker.internal:8081']
+    metrics_path: /actuator/prometheus
+
+    ec2_sd_configs:
+      - region: ap-northeast-2
+        port: 8080
+
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Name]
+        regex: board-service
+        action: keep
